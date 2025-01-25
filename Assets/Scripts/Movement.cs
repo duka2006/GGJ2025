@@ -1,4 +1,5 @@
 using Unity.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class Controller : MonoBehaviour
@@ -6,12 +7,13 @@ public class Controller : MonoBehaviour
     CharacterController charCtrl;
     [SerializeField] float moveSpeed;
 
-    float gravity = 1f;
+    [SerializeField] float gravity = 5f;
     Vector2 directionInputs;
     Vector3 moveDirection;
 
     bool isGrounded;
 
+    LayerMask ground = 3;
     void Start()
     {
         charCtrl = GetComponent<CharacterController>();
@@ -21,34 +23,27 @@ public class Controller : MonoBehaviour
     void Update()
     {
         CheckGround();
-        directionInputs = new Vector2(Input.GetAxis("Vertical") * moveSpeed, Input.GetAxis("Horizontal") * moveSpeed);
+        directionInputs = new Vector2(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
         float moveDirectionY = moveDirection.y;
-        moveDirection = (transform.TransformDirection(Vector3.forward) * directionInputs.x) + (transform.TransformDirection(Vector3.right) * directionInputs.y);
+        moveDirection = ((transform.TransformDirection(Vector3.forward) * directionInputs.x) + (transform.TransformDirection(Vector3.right) * directionInputs.y)).normalized;
         moveDirection.y = moveDirectionY;
 
         if (!isGrounded)
         {
-            moveDirection.y -= gravity;
+            moveDirection.y -= gravity * Time.deltaTime;
+            Mathf.Clamp(moveDirection.y, -gravity, 0);
         }
-        else
-        {
-            Debug.Log(directionInputs);
-            charCtrl.Move(moveDirection * Time.deltaTime);
-        }
+        charCtrl.Move(moveDirection * Time.deltaTime * moveSpeed);
+        
     }
     void CheckGround()
     {
         RaycastHit hit;
-
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down) * 1f, out hit))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, charCtrl.height / 2f + .5f, ground))
         {
-            if (hit.collider.gameObject.layer == 3)
-            {
-                isGrounded = true;
-            }
-            else isGrounded = false;
+            isGrounded = true;
         }
         else isGrounded = false;
-        
+
     }
 }
