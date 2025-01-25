@@ -8,29 +8,30 @@ public class Turret : MonoBehaviour
 
     [SerializeField] float speed = 100f;
 
-    GameObject horizontalObj = null;
-    GameObject verticalObj = null;
+    [SerializeField]GameObject horizontalObj = null;
+    [SerializeField] GameObject verticalObj = null;
+    
+    
 
     Quaternion horRot;
     Quaternion vertRot;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        horizontalObj = transform.Find("Horizontal").gameObject;
-        horizontalObj = transform.Find("Vertical").gameObject;
-    }
 
     // Update is called once per frame
     void Update()
     {
         if (m_target)
         {
+            /*
             horRot = Quaternion.LookRotation(m_target.transform.position - transform.position, Vector3.up);
             if (horizontalObj.transform.rotation != horRot)
             {
                 horizontalObj.transform.rotation = Quaternion.RotateTowards(horizontalObj.transform.rotation, horRot, speed * Time.deltaTime);
             }
+            */
+            horizontalObj.transform.LookAt(m_target.transform.position);
+            verticalObj.transform.LookAt(m_target.transform.position);
         }
     }
     void FindTarget()
