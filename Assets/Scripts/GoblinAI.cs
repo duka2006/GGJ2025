@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,10 +8,11 @@ public class GoblinAI : MonoBehaviour
 {
     NavMeshAgent agent;
     bool inRange;
-    [SerializeField] float damage;
-    [SerializeField] float AttackSpeed;
-    [SerializeField] float HP;
-    [SerializeField] float armor;
+    [SerializeField] float damage = 20f;
+    [SerializeField] float AttackSpeed = 1f;
+    [SerializeField] float HP = 50f;
+
+    public static event Action<GameObject> deathEvent;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,25 @@ public class GoblinAI : MonoBehaviour
     }
     private void Update()
     {
-        
+        if (HP <= 0)
+        {
+            deathEvent?.Invoke(gameObject);
+            gameObject.SetActive(false);
+        }
+    }
+    void TakeDamage(float damage, GameObject obj)
+    {
+            if (obj && obj == this.gameObject)
+            {
+                HP -= damage;
+            }
+    }
+    private void OnEnable()
+    {
+        Turret.shootEvent += TakeDamage;
+    }
+    private void OnDisable()
+    {
+        Turret.shootEvent -= TakeDamage;
     }
 }
