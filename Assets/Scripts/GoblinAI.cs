@@ -12,7 +12,7 @@ public class GoblinAI : MonoBehaviour
     [SerializeField] float AttackSpeed = 1f;
     [SerializeField] float HP = 50f;
 
-    public static event Action<GameObject> deathEvent;
+    public static event Action deathEvent;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +24,7 @@ public class GoblinAI : MonoBehaviour
     {
         if (HP <= 0)
         {
-            deathEvent?.Invoke(gameObject);
+            deathEvent?.Invoke();
             gameObject.SetActive(false);
         }
     }
