@@ -33,15 +33,15 @@ public class MonsterSpawner : MonoBehaviour
         {
             genRanLength = Random.Range(length, depth);
         }
-        while (Vector3.Distance(transform.position, new Vector3(genRanLength, 3.38f, genRanDepth)) < minDistance);
+        while (Vector3.Distance(transform.position, new Vector3(genRanLength, 3.5f, genRanDepth)) < minDistance);
 
         do
         {
             genRanDepth = Random.Range(-depth, depth);
         }
-        while (Vector3.Distance(transform.position, new Vector3(genRanLength, 3.38f, genRanDepth)) < minDistance);
+        while (Vector3.Distance(transform.position, new Vector3(genRanLength, 3.5f, genRanDepth)) < minDistance);
 
-        positionOfEnemy = new Vector3(genRanLength, 3.38f, genRanDepth);
+        positionOfEnemy = new Vector3(genRanLength, 3.5f, genRanDepth);
         Instantiate(enemy, positionOfEnemy, Quaternion.identity);
     }
     private void OnEnable()

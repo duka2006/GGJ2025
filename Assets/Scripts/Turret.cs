@@ -1,11 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Events;
-using static UnityEngine.GraphicsBuffer;
-using UnityEngine.UIElements;
 using TMPro;
 
 public class Turret : MonoBehaviour
@@ -93,7 +87,7 @@ public class Turret : MonoBehaviour
             // animator.SetTrigger("Shoot");
             Text.GetComponent<TMP_Text>().text = currentAmmo.ToString() + "/" + maxAmmo;
             currentAmmo--;
-            shoot.Play(-1, timeBetweenAttack);
+            shoot.Play();
         }
     }
 
@@ -151,11 +145,10 @@ public class Turret : MonoBehaviour
             {
                 if (PlayerMovement.pm.currentPickUp != null)
                 {
-                    Debug.Log("IMA ITEM");
                     PlayerMovement.pm.ThrowItem();
                     other.gameObject.SetActive(false);
+                    AddAmmunition();
                 }
-                AddAmmunition();
             }
         }
     }
